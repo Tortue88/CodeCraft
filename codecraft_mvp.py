@@ -189,6 +189,165 @@ NIVEAUX = [
             "",
         ],
     },
+    # Niveau 6 : Abattage — solution : avancer(3), briser(), avancer(6)
+    {
+        "titre": "Niveau 6  -  Abattage",
+        "hint":  "briser() detruit la tuile devant Steve",
+        "carte": [
+            "AAAAAAAAAAAA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A....A....CA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "AAAAAAAAAAAA",
+        ],
+        "sx": 1, "sy": 5, "sdir": EST,
+        "code": [
+            "# Niveau 6 : Un arbre bloque la route !",
+            "# Avancez jusqu'a l'arbre, brisez-le, continuez.",
+            "",
+            "avancer(3)",
+            "briser()",
+            "avancer(?)",
+        ],
+    },
+
+    # Niveau 7 : La foret — solution : avancer(1), briser(), avancer(2), briser(), avancer(3)
+    {
+        "titre": "Niveau 7  -  La foret",
+        "hint":  "Brisez les arbres un par un",
+        "carte": [
+            "AAAAAAAAAAAA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A..A..A...CA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "AAAAAAAAAAAA",
+        ],
+        "sx": 1, "sy": 5, "sdir": EST,
+        "code": [
+            "# Niveau 7 : Deux arbres bloquent la route !",
+            "# Brisez-les un par un.",
+            "",
+            "avancer(1)",
+            "briser()",
+            "avancer(3)",
+            "briser()",
+            "avancer(?)",
+        ],
+    },
+
+    # Niveau 8 : Poser l'etabli
+    # Solution : briser(), avancer(1), briser(), placer_etabli(), avancer(7)
+    {
+        "titre": "Niveau 8  -  Poser l'etabli",
+        "hint":  "Abattez 2 arbres, posez l'etabli, puis avancez",
+        "carte": [
+            "AAAAAAAAAAAA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A.AA......CA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "AAAAAAAAAAAA",
+        ],
+        "sx": 1, "sy": 5, "sdir": EST,
+        "code": [
+            "# Niveau 8 : Collectez du bois et posez un etabli !",
+            "# briser() sur un arbre donne 2 bois.",
+            "# Il faut 4 bois pour placer_etabli().",
+            "# Posez l'etabli derriere vous avec demi_tour() !",
+            "",
+            "briser()",
+            "avancer(1)",
+            "briser()",
+            "avancer(1)",
+            "demi_tour()",
+            "placer_etabli()",
+            "demi_tour()",
+            "avancer(?)",
+        ],
+        "condition": lambda: any(CARTE[l][c] == 'T' for l in range(NB_LIG) for c in range(NB_COL)),
+    },
+
+    # Niveau 9 : La pioche
+    # 5 arbres = 10 bois. Besoin : 4 (etabli) + 2 (batons) + 3 (pioche) = 9 bois + 2 batons
+    # Solution : avancer(2), briser(), avancer(1), briser(), avancer(1), briser(),
+    #            avancer(1), briser(), avancer(1), briser(), placer_etabli(),
+    #            ouvrir_etabli(), crafter_batons(), ouvrir_etabli(), crafter_pioche_bois(),
+    #            avancer(1), briser(), avancer(1)
+    {
+        "titre": "Niveau 9  -  La pioche",
+        "hint":  "Abattez 5 arbres -> etabli -> crafter -> pioche -> pierre",
+        "carte": [
+            "AAAAAAAAAAAA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A..AAAAA#.CA",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "AAAAAAAAAAAA",
+        ],
+        "sx": 1, "sy": 5, "sdir": EST,
+        "code": [
+            "# Niveau 9 : Fabriquez une pioche pour briser la pierre !",
+            "# 1. Abattez les arbres (briser) - 5 arbres = 10 bois",
+            "# 2. Posez un etabli (placer_etabli) - cout : 4 bois",
+            "# 3. Ouvrez-le (ouvrir_etabli)",
+            "# 4. Craftez des batons (crafter_batons) - cout : 2 bois",
+            "# 5. Ouvrez l'etabli a nouveau, craftez pioche",
+            "# 6. Brisez la pierre (briser)",
+            "",
+            "avancer(2)",
+            "briser()",
+            "avancer(?)",
+        ],
+    },
+
+    # Niveau 10 : Le grand craft
+    # 5 arbres ligne 2, pierre col 8 ligne 6, coffre col 9 ligne 6
+    {
+        "titre": "Niveau 10  -  Le grand craft",
+        "hint":  "5 arbres = 10 bois. Etabli=4, Batons=2, Pioche=3+2b. Bonne chance !",
+        "carte": [
+            "AAAAAAAAAAAA",
+            "A..........A",
+            "A...AAAAA..A",
+            "A..........A",
+            "A..........A",
+            "A..........A",
+            "A.......#C.A",
+            "A..........A",
+            "A..........A",
+            "AAAAAAAAAAAA",
+        ],
+        "sx": 1, "sy": 1, "sdir": EST,
+        "code": [
+            "# Niveau 10 : Le grand craft final !",
+            "# Vous avez besoin d'au moins 9 bois (5 arbres).",
+            "# Sequence : abattre -> etabli -> batons",
+            "#            -> pioche -> briser pierre -> coffre",
+            "",
+            "# Etape 1 : Naviguer vers les arbres et les abattre",
+            "avancer(?)",
+            "briser()",
+            "# ... continuez !",
+        ],
+    },
 ]
 
 # ─── TUILES ─────────────────────────────────────────────────
@@ -199,8 +358,11 @@ TUILE_COULEUR = {
     '#': (110,110,110),
     's': (200,185, 80),
     'C': (160, 100, 30),
+    'T': (180, 120, 40),
+    'B': (140, 90, 30),
+    'R': (160, 160, 160),
 }
-IMPASSABLE = {'~', 'A'}
+IMPASSABLE = {'~', 'A', '#', 'T'}
 
 # ─── CARTE ACTIVE ───────────────────────────────────────────
 CARTE  = []
@@ -221,8 +383,9 @@ LH      = 16          # hauteur d'une ligne editeur
 VIS     = 10          # lignes visibles dans l'editeur
 
 # Zones et boutons (recalcules par recalculer_layout)
-ZONE_NIVEAU   = None
-ZONE_TITRE_ED = None
+ZONE_NIVEAU     = None
+ZONE_INVENTAIRE = None
+ZONE_TITRE_ED   = None
 ZONE_EDIT     = None
 ZONE_BTNS     = None
 ZONE_AIDE     = None
@@ -259,6 +422,10 @@ etape_idx = 0
 timer     = 0
 DELAI_MS  = 230
 
+# ─── INVENTAIRE ET CRAFT ────────────────────────────────────
+inventaire = {}
+etabli_ouvert = False
+
 # ─── CONSOLE ────────────────────────────────────────────────
 messages = []
 
@@ -277,7 +444,7 @@ def recalculer_layout():
     redimensionnement ou bascule plein ecran.
     """
     global CELL, MAP_W, MAP_H, PANEL_W, WIN_W, WIN_H
-    global ZONE_NIVEAU, ZONE_TITRE_ED, ZONE_EDIT
+    global ZONE_NIVEAU, ZONE_INVENTAIRE, ZONE_TITRE_ED, ZONE_EDIT
     global ZONE_BTNS, ZONE_AIDE, ZONE_CON
     global LH, VIS, r_exec, r_reset, r_clear
 
@@ -305,20 +472,27 @@ def recalculer_layout():
     # Zones verticales du panneau
     # Le panneau est divise en : titre-niveau / titre-editeur / editeur /
     #                            boutons / aide / console / statut
-    AIDE_H = 90             # hauteur fixe du bloc aide
+    AIDE_H = 170            # hauteur fixe du bloc aide (10 commandes)
     CON_H  = max(80, WIN_H // 6)   # console : 1/6 de la hauteur
     BTN_H  = 30
     TITH   = 18             # hauteur d'une barre de titre
 
+    # Hauteur de l'inventaire (variable)
+    lh_inv = POLICE_UI.get_height() + 2
+    nb_inv = len(inventaire)
+    INV_H  = (nb_inv * lh_inv + 22) if nb_inv > 0 else 0
+
     # On calcule de bas en haut
     y_con   = WIN_H - CON_H
     y_btns  = y_con - AIDE_H - TITH - BTN_H - 4
-    y_edit  = TITH + TITH + 4      # apres les deux barres de titre
+    y_inv   = TITH + 4
+    y_edit  = y_inv + INV_H + TITH     # apres inventaire + titre editeur
     edit_h  = y_btns - y_edit - 4
 
-    ZONE_NIVEAU   = pygame.Rect(PX, 2,      PW, TITH)
-    ZONE_TITRE_ED = pygame.Rect(PX, TITH+4, PW, TITH)
-    ZONE_EDIT     = pygame.Rect(PX, y_edit, PW, max(edit_h, 40))
+    ZONE_NIVEAU     = pygame.Rect(PX, 2,      PW, TITH)
+    ZONE_INVENTAIRE = pygame.Rect(PX, y_inv, PW, INV_H) if nb_inv > 0 else None
+    ZONE_TITRE_ED   = pygame.Rect(PX, y_inv + INV_H, PW, TITH)
+    ZONE_EDIT       = pygame.Rect(PX, y_edit, PW, max(edit_h, 40))
     ZONE_BTNS     = pygame.Rect(PX, y_btns, PW, BTN_H)
     ZONE_AIDE     = pygame.Rect(PX, y_btns + BTN_H + 4,          PW, AIDE_H)
     ZONE_CON      = pygame.Rect(PX, y_btns + BTN_H + AIDE_H + TITH + 8, PW, CON_H)
@@ -390,6 +564,16 @@ def compiler(code):
             etapes_loc.append(('tourner', -1))
         elif s == 'demi_tour()':
             etapes_loc.append(('tourner', +2))
+        elif s == 'briser()':
+            etapes_loc.append(('action', 'briser'))
+        elif s == 'placer_etabli()':
+            etapes_loc.append(('action', 'placer_etabli'))
+        elif s == 'ouvrir_etabli()':
+            etapes_loc.append(('action', 'ouvrir_etabli'))
+        elif s == 'crafter_batons()':
+            etapes_loc.append(('action', 'crafter_batons'))
+        elif s == 'crafter_pioche_bois()':
+            etapes_loc.append(('action', 'crafter_pioche_bois'))
         else:
             erreurs.append("Ligne " + str(num) + " inconnue : " + s)
     return etapes_loc, erreurs
@@ -414,9 +598,12 @@ def executer():
     en_exec = True
 
 def reinitialiser():
-    global en_exec, etapes, etape_idx
+    global en_exec, etapes, etape_idx, CARTE, etabli_ouvert, inventaire
     niv = NIVEAUX[niveau_actuel]
     steve["x"], steve["y"], steve["dir"] = niv["sx"], niv["sy"], niv["sdir"]
+    CARTE = [list(r) for r in niv["carte"]]
+    inventaire = {}
+    etabli_ouvert = False
     en_exec, etapes, etape_idx = False, [], 0
 
 def niveau_suivant():
@@ -434,13 +621,117 @@ def niveau_suivant():
         log("Vous avez termine tous les niveaux !", OR)
         log("Vous etes un vrai programmeur !", (200, 255, 200))
 
+# ─── HELPERS INVENTAIRE ET ACTIONS ──────────────────────────
+def tuile_devant():
+    fx = steve["x"] + DX[steve["dir"]]
+    fy = steve["y"] + DY[steve["dir"]]
+    if 0 <= fx < NB_COL and 0 <= fy < NB_LIG:
+        return fx, fy, CARTE[fy][fx]
+    return fx, fy, None
+
+def inv_ajouter(item, n):
+    inventaire[item] = inventaire.get(item, 0) + n
+
+def inv_retirer(item, n):
+    inventaire[item] = inventaire.get(item, 0) - n
+    if inventaire[item] <= 0:
+        del inventaire[item]
+
+def inv_a(item, n):
+    return inventaire.get(item, 0) >= n
+
+def action_briser():
+    global etabli_ouvert
+    fx, fy, t = tuile_devant()
+    if t == 'A':
+        CARTE[fy][fx] = 'B'
+        inv_ajouter("bois", 2)
+        log("Arbre brise ! +2 bois", (100, 200, 100))
+        return True
+    elif t == '#' and inv_a("pioche_bois", 1):
+        CARTE[fy][fx] = 'R'
+        inv_retirer("pioche_bois", 1)
+        log("Pierre brisee ! La pioche en bois est usee.", (100, 200, 100))
+        return True
+    else:
+        if t == '#':
+            log("Il faut une pioche pour briser la pierre !", ROUGE)
+        else:
+            log("Rien a briser devant Steve !", ROUGE)
+        return False
+
+def action_placer_etabli():
+    fx, fy, t = tuile_devant()
+    if not inv_a("bois", 4):
+        log("Pas assez de bois pour l'etabli (4 requis) !", ROUGE)
+        return False
+    if t not in ('.', 'B'):
+        log("Impossible de poser l'etabli ici !", ROUGE)
+        return False
+    CARTE[fy][fx] = 'T'
+    inv_retirer("bois", 4)
+    log("Etabli pose ! (-4 bois)", (100, 200, 100))
+    return True
+
+def action_ouvrir_etabli():
+    global etabli_ouvert
+    fx, fy, t = tuile_devant()
+    if t != 'T':
+        log("Pas d'etabli devant Steve !", ROUGE)
+        return False
+    etabli_ouvert = True
+    log("Etabli ouvert.", (100, 200, 100))
+    return True
+
+def action_crafter_batons():
+    global etabli_ouvert
+    if not etabli_ouvert:
+        log("Ouvrez d'abord un etabli !", ROUGE)
+        return False
+    if not inv_a("bois", 2):
+        log("Pas assez de bois (2 requis) !", ROUGE)
+        return False
+    inv_retirer("bois", 2)
+    inv_ajouter("baton", 4)
+    etabli_ouvert = False
+    log("Crafte : 4 batons ! (-2 bois)", (100, 200, 100))
+    return True
+
+def action_crafter_pioche_bois():
+    global etabli_ouvert
+    if not etabli_ouvert:
+        log("Ouvrez d'abord un etabli !", ROUGE)
+        return False
+    if not inv_a("bois", 3) or not inv_a("baton", 2):
+        log("Il faut 3 bois et 2 batons !", ROUGE)
+        return False
+    inv_retirer("bois", 3)
+    inv_retirer("baton", 2)
+    inv_ajouter("pioche_bois", 1)
+    etabli_ouvert = False
+    log("Crafte : pioche en bois ! (-3 bois, -2 batons)", (100, 200, 100))
+    return True
+
+ACTIONS = {
+    'briser': action_briser,
+    'placer_etabli': action_placer_etabli,
+    'ouvrir_etabli': action_ouvrir_etabli,
+    'crafter_batons': action_crafter_batons,
+    'crafter_pioche_bois': action_crafter_pioche_bois,
+}
+
 def jouer_prochaine_etape():
     global en_exec, etape_idx
     if etape_idx >= len(etapes):
         en_exec = False
         if CARTE[steve["y"]][steve["x"]] == 'C':
-            log("BRAVO ! Steve a trouve le coffre !", JAUNE)
-            niveau_suivant()
+            niv = NIVEAUX[niveau_actuel]
+            condition = niv.get("condition", None)
+            if condition is None or condition():
+                log("BRAVO ! Steve a trouve le coffre !", JAUNE)
+                niveau_suivant()
+            else:
+                log("Objectif non rempli ! Relisez les instructions.", ROUGE)
         else:
             log("Termine en (" + str(steve['x']) + "," + str(steve['y']) + "). Pas encore au coffre.", GRIS)
             log("Reessayez !", (220, 160, 60))
@@ -462,6 +753,10 @@ def jouer_prochaine_etape():
             en_exec = False
         else:
             steve["x"], steve["y"] = nx, ny
+    elif type_e == 'action':
+        fn = ACTIONS.get(val)
+        if fn and not fn():
+            en_exec = False
 
 # ═══════════════════════════════════════════════════
 #  DESSIN
@@ -521,7 +816,7 @@ def dessiner_editeur():
         s = ligne.strip()
         if s.startswith('#'):
             col = (100, 160,  80)
-        elif any(c in s for c in ('avancer','reculer','tourner','demi_tour')):
+        elif any(c in s for c in ('avancer','reculer','tourner','demi_tour','briser','placer_etabli','ouvrir_etabli','crafter')):
             col = (220, 220, 140)
         else:
             col = (200, 200, 215)
@@ -541,6 +836,11 @@ AIDE_CMDS = [
     ("tourner_droite()", "pivote 90 degres a droite"),
     ("tourner_gauche()", "pivote 90 degres a gauche"),
     ("demi_tour()",      "fait volte-face (180 degres)"),
+    ("briser()",             "brise tuile devant Steve"),
+    ("placer_etabli()",      "pose un etabli (4 bois)"),
+    ("ouvrir_etabli()",      "ouvre l'etabli devant Steve"),
+    ("crafter_batons()",     "2 bois -> 4 batons"),
+    ("crafter_pioche_bois()","3 bois+2 batons -> pioche"),
 ]
 
 def dessiner_aide():
@@ -586,12 +886,33 @@ def dessiner_interface():
         (  0, 120, 100),
         (  0, 140,  60),
         ( 80, 130,   0),
+        ( 40, 100,  80),
+        ( 60,  80, 120),
+        (100,  60,  40),
+        (120,  40,  60),
+        (140,  20,  20),
     ]
     pygame.draw.rect(screen, teintes[niveau_actuel], ZONE_NIVEAU)
     t_niv = POLICE_B.render(niv["titre"], True, BLANC)
     screen.blit(t_niv, (ZONE_NIVEAU.x + 4, ZONE_NIVEAU.y + 2))
     t_idx = POLICE_B.render(str(niveau_actuel+1) + " / " + str(len(NIVEAUX)), True, JAUNE)
     screen.blit(t_idx, (ZONE_NIVEAU.right - t_idx.get_width() - 6, ZONE_NIVEAU.y + 2))
+
+    # Inventaire
+    if ZONE_INVENTAIRE is not None:
+        r_inv_titre = pygame.Rect(ZONE_INVENTAIRE.x, ZONE_INVENTAIRE.y, ZONE_INVENTAIRE.w, 18)
+        pygame.draw.rect(screen, (100, 60, 20), r_inv_titre)
+        screen.blit(POLICE_UI.render("Inventaire", True, BLANC),
+                    (r_inv_titre.x + 4, r_inv_titre.y + 2))
+        r_inv_corps = pygame.Rect(ZONE_INVENTAIRE.x, ZONE_INVENTAIRE.y + 18,
+                                  ZONE_INVENTAIRE.w, ZONE_INVENTAIRE.h - 18)
+        pygame.draw.rect(screen, (40, 30, 20), r_inv_corps)
+        pygame.draw.rect(screen, GRIS, r_inv_corps, 1)
+        lh_inv = POLICE_UI.get_height() + 2
+        for i, (item, qty) in enumerate(inventaire.items()):
+            y_item = r_inv_corps.y + 2 + i * lh_inv
+            t_item = POLICE_UI.render(item + " x" + str(qty), True, (220, 200, 140))
+            screen.blit(t_item, (r_inv_corps.x + 6, y_item))
 
     # Titre editeur
     pygame.draw.rect(screen, (0, 0, 128), ZONE_TITRE_ED)
@@ -672,7 +993,7 @@ def gerer_clavier(event):
 recalculer_layout()
 charger_niveau(0)
 log("Bienvenue dans CodeCraft !", (100, 200, 255))
-log("Niveau 1 / 5  -  Ligne droite", (180, 255, 180))
+log("Niveau 1 / " + str(len(NIVEAUX)) + "  -  Ligne droite", (180, 255, 180))
 log(NIVEAUX[0]["hint"], (160, 200, 140))
 log("F5 = executer  |  F11 = plein ecran", (120, 160, 120))
 
