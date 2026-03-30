@@ -414,6 +414,7 @@ lignes  = []
 cur_lig = 0
 cur_col = 0
 scroll  = 0
+scroll_aide = 0
 
 # ─── EXECUTION ──────────────────────────────────────────────
 en_exec   = False
@@ -446,7 +447,7 @@ def recalculer_layout():
     global CELL, MAP_W, MAP_H, PANEL_W, WIN_W, WIN_H
     global ZONE_NIVEAU, ZONE_INVENTAIRE, ZONE_TITRE_ED, ZONE_EDIT
     global ZONE_BTNS, ZONE_AIDE, ZONE_CON
-    global LH, VIS, r_exec, r_reset, r_clear
+    global LH, VIS, VIS_AIDE, r_exec, r_reset, r_clear
 
     W, H = screen.get_size()
     WIN_W = W
@@ -499,6 +500,7 @@ def recalculer_layout():
 
     LH  = POLICE.get_height() + 2
     VIS = ZONE_EDIT.height // LH
+    VIS_AIDE = max(1, (AIDE_H - 24) // LH)
 
     BTN_W  = PW // 3
     r_exec  = pygame.Rect(ZONE_BTNS.x,            ZONE_BTNS.y, BTN_W, BTN_H)
@@ -520,7 +522,7 @@ def toggle_plein_ecran():
 # ═══════════════════════════════════════════════════
 def charger_niveau(n):
     global CARTE, NB_COL, NB_LIG, niveau_actuel
-    global lignes, cur_lig, cur_col, scroll
+    global lignes, cur_lig, cur_col, scroll, scroll_aide
 
     niveau_actuel = n
     niv    = NIVEAUX[n]
@@ -536,6 +538,7 @@ def charger_niveau(n):
     cur_lig = len(lignes) - 1
     cur_col = len(lignes[cur_lig])
     scroll  = 0
+    scroll_aide = 0
 
 # ═══════════════════════════════════════════════════
 #  PARSEUR / COMPILATEUR
@@ -844,6 +847,7 @@ AIDE_CMDS = [
 ]
 
 def dessiner_aide():
+    global scroll_aide
     r_titre = pygame.Rect(ZONE_AIDE.x, ZONE_AIDE.y, ZONE_AIDE.w, 18)
     pygame.draw.rect(screen, (0, 0, 128), r_titre)
     screen.blit(POLICE_UI.render("Commandes disponibles", True, BLANC),
@@ -852,12 +856,31 @@ def dessiner_aide():
     pygame.draw.rect(screen, (20, 20, 35), r_corps)
     pygame.draw.rect(screen, GRIS, r_corps, 1)
     lh = POLICE.get_height() + 2
-    for i, (cmd, desc) in enumerate(AIDE_CMDS):
+    max_scroll = max(0, len(AIDE_CMDS) - VIS_AIDE)
+    scroll_aide = max(0, min(scroll_aide, max_scroll))
+    screen.set_clip(r_corps)
+    for i in range(VIS_AIDE):
+        idx = scroll_aide + i
+        if idx >= len(AIDE_CMDS):
+            break
+        cmd, desc = AIDE_CMDS[idx]
         y = r_corps.y + 3 + i * lh
         t_cmd  = POLICE.render(cmd, True, (220, 220, 140))
         t_desc = POLICE_UI.render(desc, True, (140, 140, 160))
         screen.blit(t_cmd,  (r_corps.x + 4, y))
         screen.blit(t_desc, (r_corps.x + 4 + t_cmd.get_width() + 6, y + 1))
+    screen.set_clip(None)
+    # Indicateurs de scroll (triangles)
+    if scroll_aide > 0:
+        cx = r_corps.right - 12
+        ty = r_corps.y + 4
+        pygame.draw.polygon(screen, (180, 180, 200),
+                            [(cx - 5, ty + 7), (cx + 5, ty + 7), (cx, ty)])
+    if scroll_aide < max_scroll:
+        cx = r_corps.right - 12
+        by = r_corps.bottom - 4
+        pygame.draw.polygon(screen, (180, 180, 200),
+                            [(cx - 5, by - 7), (cx + 5, by - 7), (cx, by)])
 
 def dessiner_console():
     r_tit = pygame.Rect(ZONE_CON.x, ZONE_CON.y-18, ZONE_CON.w, 18)
@@ -1038,6 +1061,15 @@ while True:
                         if ZONE_EDIT.x + 22 + POLICE.size(lignes[cur_lig][:c])[0] >= pos[0]:
                             break
                         cur_col = c
+
+        elif event.type == pygame.MOUSEWHEEL:
+            pos = pygame.mouse.get_pos()
+            if ZONE_AIDE.collidepoint(pos):
+                scroll_aide = max(0, min(scroll_aide - event.y,
+                                  max(0, len(AIDE_CMDS) - VIS_AIDE)))
+            elif ZONE_EDIT.collidepoint(pos):
+                scroll = max(0, min(scroll - event.y,
+                             max(0, len(lignes) - VIS)))
 
     screen.fill(FOND)
     dessiner_carte()
